@@ -9,10 +9,11 @@ files_to_download = ['Empresas', 'Estabelecimentos', 'Socios', 'Motivos', 'Munic
 
 
 def download_files(download_list, address):
+    os.mkdir('tmpZipFiles')
     for i in download_list:
-        if i == 'Estabelecimentos' or i == 'Socios':
+        if i == 'Estabelecimentos' or i == 'Socios'or i == 'Empresas':
             for idx in range(1, 10):
-                print(f'Downloading file {i}{idx}')
+                print(f'Downloading file {address}/{i}{idx}.zip"')
                 response = urllib.request.urlopen(f"{address}/{i}{idx}.zip")
                 file_size = response.headers.get('Content-Length')
                 with tqdm(total=int(file_size), unit='B', unit_scale=True) as pbar:
@@ -21,7 +22,7 @@ def download_files(download_list, address):
                         with open(f'tmpZipFiles/{i}{idx}.zip', 'ab') as f:
                             f.write(data)
         else:
-            print(f'Downloading file {i}')
+            print(f'Downloading file {address}/{i}.zip')
             response = urllib.request.urlopen(f'{address}/{i}.zip')
             file_size = response.headers.get('Content-Length')
             with tqdm(total=int(file_size), unit='B', unit_scale=True) as pbar:
@@ -32,6 +33,8 @@ def download_files(download_list, address):
 
 
 def extract_and_move_zip_files():
+    os.mkdir('tmp_dataset')
+    os.mkdir('dataset')
     for zip_file in os.listdir("tmpZipFiles"):
         file_path = "tmpZipFiles/" + zip_file
         print(f'Extracting {file_path}')
@@ -40,15 +43,13 @@ def extract_and_move_zip_files():
     for unzip_file in os.listdir("tmp_dataset"):
         for i in range(0, len(files_to_download)):
             if files_to_download[i][:4].lower() in unzip_file.lower():
-                shutil.move('tmp_dataset', f"{outdir}/{unzip_file}.csv")
+                shutil.move('tmp_dataset', f"dataset/{unzip_file}.csv")
 
     shutil.rmtree("tmp_dataset")
     shutil.rmtree("tmpZipFiles")
 
 
 if __name__ == '__main__':
-    os.mkdir('tmp_dataset')
-    os.mkdir('dataset')
-    # download_files(files_to_download, url)
+    download_files(files_to_download, url)
     extract_and_move_zip_files()
 
