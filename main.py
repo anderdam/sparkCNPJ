@@ -44,12 +44,11 @@ def extract_and_move_zip_files():
         # Split the file name by the last dot
         file_name_parts = unzip_file.split('.')
         # Get the file extension
-        # file_extension = file_name_parts[-1]
-        # Remove the file extension from the file name
-        file_name_without_extension = ''.join(file_name_parts[-1])
+        # Remove the file ending from the file name
+        file_name_split = ''.join(file_name_parts[-1])
 
         # Create a directory for the file if it doesn't exist
-        destination_directory = os.path.join('dataset', file_name_without_extension)
+        destination_directory = os.path.join('dataset', file_name_split)
         if not os.path.exists(destination_directory):
             os.mkdir(destination_directory)
 
