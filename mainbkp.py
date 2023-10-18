@@ -1,33 +1,55 @@
-# import time
 # import zipfile
 # import os
 # import shutil
 # import urllib.request
-# from pyspark.sql import SparkSession
+# from tqdm import tqdm
 #
-# print('Início: ', time.time())
-# download_list = ['Estabelecimentos', 'Sócios', 'Motivos', 'Municípios', 'Naturezas', 'Paises', 'Qualificações', 'Simples']
+# url = 'https://dadosabertos.rfb.gov.br/CNPJ'
+# files_to_download = ['Empresas', 'Estabelecimentos', 'Socios', 'Motivos', 'Municipios', 'Naturezas', 'Paises', 'Qualificacoes', 'Simples', 'Cnaes']
 #
 #
-# for i in download_list:
-#     if i == 'Estabelecimentos' or i == 'Sócios':
-#         for idx in range(1, 10):
-#             print(f'Downloading file {i}{idx}')
-#             urllib.request.urlretrieve(f"https://dadosabertos.rfb.gov.br/CNPJ/{i}{idx}.zip", f"tmpZipFiles/{i}{idx}.zip")
-#     else:
-#         print(f'Downloading file {i}')
-#         urllib.request.urlretrieve(f"https://dadosabertos.rfb.gov.br/CNPJ/{i}.zip", f"tmpZipFiles/{i}.zip")
+# def download_files(download_list, address):
+#     os.mkdir('tmpZipFiles')
+#     for i in download_list:
+#         if i == 'Estabelecimentos' or i == 'Socios'or i == 'Empresas':
+#             for idx in range(1, 10):
+#                 print(f'Downloading file {address}/{i}{idx}.zip"')
+#                 response = urllib.request.urlopen(f"{address}/{i}{idx}.zip")
+#                 file_size = response.headers.get('Content-Length')
+#                 with tqdm(total=int(file_size), unit='B', unit_scale=True) as pbar:
+#                     for data in response:
+#                         pbar.update(len(data))
+#                         with open(f'tmpZipFiles/{i}{idx}.zip', 'ab') as f:
+#                             f.write(data)
+#         else:
+#             print(f'Downloading file {address}/{i}.zip')
+#             response = urllib.request.urlopen(f'{address}/{i}.zip')
+#             file_size = response.headers.get('Content-Length')
+#             with tqdm(total=int(file_size), unit='B', unit_scale=True) as pbar:
+#                 for data in response:
+#                     pbar.update(len(data))
+#                     with open(f'tmpZipFiles/{i}.zip', 'ab') as f:
+#                         f.write(data)
 #
-# os.mkdir('tmp_dataset')
-# os.mkdir('dataset')
 #
-# for zip_file in os.listdir("tmpZipFiles"):
-#     file_path = "tmpZipFiles/" + zip_file
-#     print(f'Extracting {file_path}')
-#     zipfile.ZipFile(file_path, 'r').extractall('tmp_dataset')
+# def extract_and_move_zip_files():
+#     os.mkdir('tmp_dataset')
+#     os.mkdir('dataset')
+#     for zip_file in os.listdir("tmpZipFiles"):
+#         file_path = "tmpZipFiles/" + zip_file
+#         print(f'Extracting {file_path}')
+#         zipfile.ZipFile(file_path, 'r').extractall('tmp_dataset')
 #
-# for unzip_file in os.listdir("tmp_dataset"):
-#     shutil.move("tmp_dataset/" + unzip_file, "dataset/" + unzip_file + ".csv")
+#     for unzip_file in os.listdir("tmp_dataset"):
+#         for i in range(0, len(files_to_download)):
+#             if files_to_download[i][:4].lower() in unzip_file.lower():
+#                 shutil.move('tmp_dataset', f"dataset/{unzip_file}.csv")
 #
-# shutil.rmtree("tmp_dataset")
-# print('Fim: ', time.time())
+#     shutil.rmtree("tmp_dataset")
+#     shutil.rmtree("tmpZipFiles")
+#
+#
+# if __name__ == '__main__':
+#     # download_files(files_to_download, url)
+#     extract_and_move_zip_files()
+#

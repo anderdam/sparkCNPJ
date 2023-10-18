@@ -41,9 +41,20 @@ def extract_and_move_zip_files():
         zipfile.ZipFile(file_path, 'r').extractall('tmp_dataset')
 
     for unzip_file in os.listdir("tmp_dataset"):
-        for i in range(0, len(files_to_download)):
-            if files_to_download[i][:4].lower() in unzip_file.lower():
-                shutil.move('tmp_dataset', f"dataset/{unzip_file}.csv")
+        # Split the file name by the last dot
+        file_name_parts = unzip_file.split('.')
+        # Get the file extension
+        # file_extension = file_name_parts[-1]
+        # Remove the file extension from the file name
+        file_name_without_extension = ''.join(file_name_parts[-1])
+
+        # Create a directory for the file if it doesn't exist
+        destination_directory = os.path.join('dataset', file_name_without_extension)
+        if not os.path.exists(destination_directory):
+            os.mkdir(destination_directory)
+
+        # Move the file to the destination directory
+        shutil.move(os.path.join('tmp_dataset', unzip_file), os.path.join(destination_directory, f'{unzip_file}.csv'))
 
     shutil.rmtree("tmp_dataset")
     shutil.rmtree("tmpZipFiles")
@@ -52,4 +63,3 @@ def extract_and_move_zip_files():
 if __name__ == '__main__':
     download_files(files_to_download, url)
     extract_and_move_zip_files()
-
