@@ -103,7 +103,7 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 ### dotenv template
-.env
+env.py
 
 ### VirtualEnv template
 # Virtualenv
@@ -961,5 +961,5 @@ cython_debug/
 #.idea/
 
 # Zip and CSV files
-/tmpZipFiles
+/tmpZipFiles1
 /dataset
