@@ -11,7 +11,7 @@ files_to_download = ['Empresas', 'Estabelecimentos', 'Socios', 'Motivos', 'Munic
 def download_files(download_list, address):
     os.mkdir('tmpZipFiles')
     for i in download_list:
-        if i == 'Estabelecimentos' or i == 'Socios'or i == 'Empresas':
+        if i == 'Estabelecimentos' or i == 'Socios' or i == 'Empresas':
             for idx in range(1, 10):
                 print(f'Downloading file {address}/{i}{idx}.zip"')
                 response = urllib.request.urlopen(f"{address}/{i}{idx}.zip")
